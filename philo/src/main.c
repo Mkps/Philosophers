@@ -1,13 +1,17 @@
 #include "../includes/philo.h"
 
 typedef struct timeval tv;
+
+long	ft_time(tv time);
 void	timestamp(tv start)
 {
 	tv	end;
 
 	gettimeofday(&end, NULL);
-	printf("[ms : %ld ", ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)) / 1000 );
+	printf("[ms : %ld ", (ft_time(end) - ft_time(start)));
 }
+
+
 
 typedef struct philosopher {
 	int	is_alive;
@@ -15,7 +19,27 @@ typedef struct philosopher {
 	long	tte;
 	long	ttd;
 } t_philo;
+long	ft_time(tv time)
+{
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+void	ft_sleep(long duration)
+{
+	long	time;
+	tv		start;
+	tv		current;
 
+	time = 0;
+	gettimeofday(&start, NULL);
+	while (time < duration)
+	{
+		usleep(50);
+		gettimeofday(&current, NULL);
+		time = ft_time(current) - ft_time(start);
+	}
+	usleep(time);
+	return ;
+}
 int	main(int argc, char **argv)
 {
 	tv		tc;
@@ -35,12 +59,12 @@ int	main(int argc, char **argv)
 		gettimeofday(&cycle, NULL);
 		timestamp(to);	
 		printf("phi is eating\n");
-		usleep(phi.tte * 1000);
+		ft_sleep(phi.tte);
 		timestamp(to);	
 		printf("phi is sleeping\n");
-		usleep(phi.tts * 1000);
+		ft_sleep(phi.tts);
 		gettimeofday(&tc, NULL);
-		if (((tc.tv_sec * 1000000 + tc.tv_usec) - (cycle.tv_sec * 1000000 + cycle.tv_usec)) / 1000 > phi.ttd)
+		if ((ft_time(tc) - ft_time(cycle)) > phi.ttd)
 			phi.is_alive = 0;
 	}
 	timestamp(to);	
