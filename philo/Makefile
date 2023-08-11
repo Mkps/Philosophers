@@ -15,7 +15,7 @@ SRCDIR = src
 INCDIR = includes
 OBJ_DIR = build
 
-SRC = $(SRCDIR)/main.c 
+SRC = $(SRCDIR)/main.c $(SRCDIR)/output.c $(SRCDIR)/time.c 
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
