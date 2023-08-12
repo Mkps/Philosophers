@@ -64,12 +64,10 @@ void	unlock_forks(t_phi *phi)
 
 int	check_last_meal(t_phi *phi)
 {
-	if (ft_get_time() - phi->last_meal_time > phi->data->ttd)
+	if (ft_get_time() - phi->last_meal_time >= phi->data->ttd)
 	{
-		pthread_mutex_unlock(&phi->data->mutex);
-		output_msg(phi, "has died");
-		pthread_mutex_lock(&phi->data->mutex);
-		phi->data->alive = 0;
+		if (phi->data->alive != 0)
+			output_death(phi);
 		return (0);
 	}
 	return (1);
@@ -147,9 +145,7 @@ void	philo_is_taking_forks(t_phi *phi)
 	if (phi->data->phi_count <= 1)
 	{
 		ft_sleep(phi, phi->data->ttd);
-		pthread_mutex_lock(&phi->data->mutex);
-		phi->is_alive = 0;
-		pthread_mutex_unlock(&phi->data->mutex);
+		phi->got_forks = 0;
 		return ;
 	}
 	philo_taking_first_fork(phi);
@@ -205,6 +201,7 @@ int	is_phi_sated(t_phi *phi)
 	pthread_mutex_unlock(&phi->data->mutex);
 	return (1);
 }
+
 int	phi_continue(t_data *data)
 {
 	if (all_phi_alive(data) == 1 && all_phi_sated(data) == 0)
@@ -228,20 +225,15 @@ int	all_phi_sated(t_data *data)
 	}
 	return (sated);
 }
+
 void	*overseer_thread(void *source)
 {
 	t_phi	*overseer;
-	int		alive;
-	int		sated;
 
-	alive = 1;
-	sated = 0;
 	overseer = (t_phi *)source;
 	while (1)
 	{
-		alive = all_phi_alive(overseer->data);
-		sated = all_phi_sated(overseer->data);
-		if (!alive || sated)
+		if (!phi_continue(overseer->data))
 			break;
 		usleep(10);
 	}
@@ -371,8 +363,8 @@ int	main(int ac, char **av)
 	philos_init(data);
 	pthread_create(&overseer->t_id, NULL, &overseer_thread, overseer);
 	ft_create_thread(data);
-	pthread_join(overseer->t_id, NULL);
 	ft_join_thread(data);
+	pthread_join(overseer->t_id, NULL);
 	forks_destroy(data);
 	i = 0;
 	while (i < data->phi_count)

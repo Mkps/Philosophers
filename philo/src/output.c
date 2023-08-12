@@ -24,3 +24,11 @@ void	output_msg(t_phi *phi, char *msg)
 		pthread_mutex_unlock(&phi->data->output);
 	}
 }
+
+void	output_death(t_phi *phi)
+{
+	pthread_mutex_lock(&phi->data->output);
+	timestamp(phi->data->start_time);	
+	printf("%i died\n", phi->id + 1);
+	pthread_mutex_unlock(&phi->data->output);
+}
