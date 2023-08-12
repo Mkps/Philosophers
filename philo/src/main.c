@@ -1,5 +1,4 @@
 #include "../includes/philo.h"
-#include <pthread.h>
 
 
 void	ft_sleep(t_phi *phi, long duration)
@@ -7,7 +6,11 @@ void	ft_sleep(t_phi *phi, long duration)
 	long	start;
 
 	start = ft_get_time();
-	while (ft_get_time() - start < duration && is_phi_alive(phi) != 0)
+	if (duration < 10)
+	{
+		return ;
+	}
+	while (ft_get_time() - start < duration && phi_continue(phi->data))
 	{
 		usleep(10);
 	}
@@ -166,8 +169,8 @@ void	philo_is_eating(t_phi *phi)
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->last_meal_time = ft_get_time();
 	pthread_mutex_unlock(&phi->data->mutex);
-	ft_sleep(phi, phi->data->tte);
 	increase_meal_count(phi);
+	ft_sleep(phi, phi->data->tte);
 	unlock_forks(phi);
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 0;
@@ -182,7 +185,13 @@ void	philo_is_sleeping(t_phi *phi)
 
 void	philo_is_thinking(t_phi *phi)
 {
+	long big_think;
+
 	output_msg(phi, "is thinking");
+	if (phi->data->phi_count % 2 == 0)
+		return; 
+	big_think = (phi->data->ttd - (phi->data->tte + phi->data->tts));
+	ft_sleep(phi, big_think / 2);
 }
 
 int	is_phi_sated(t_phi *phi)

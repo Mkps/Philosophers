@@ -11,12 +11,13 @@ void	timestamp(tv start)
 void	output_msg(t_phi *phi, char *msg)
 {
 	int	alive;
-
+	int	sated;
 	
 	pthread_mutex_lock(&phi->data->mutex);
 	alive = phi->data->alive;
+	sated = phi->data->sated;
 	pthread_mutex_unlock(&phi->data->mutex);
-	if (alive != 0)
+	if (alive && !sated)
 	{
 		pthread_mutex_lock(&phi->data->output);
 		timestamp(phi->data->start_time);	
