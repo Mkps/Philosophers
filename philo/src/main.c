@@ -1,20 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/12 23:44:25 by aloubier          #+#    #+#             */
+/*   Updated: 2023/08/12 23:44:30 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
-
-
-void	ft_sleep(t_phi *phi, long duration)
-{
-	long	start;
-
-	start = ft_get_time();
-	if (duration < 10)
-	{
-		return ;
-	}
-	while (ft_get_time() - start < duration && phi_continue(phi->data))
-	{
-		usleep(10);
-	}
-}
 
 void	init_philo(t_phi *phi, t_data *data)
 {
@@ -65,53 +61,6 @@ void	unlock_forks(t_phi *phi)
 	}
 }
 
-int	check_last_meal(t_phi *phi)
-{
-	if (ft_get_time() - phi->last_meal_time >= phi->data->ttd)
-	{
-		if (phi->data->alive != 0)
-			output_death(phi);
-		return (0);
-	}
-	return (1);
-}
-
-int	all_phi_alive(t_data *data)
-{
-	int		i;
-	int		alive;
-
-	i = 0;
-	alive = 1;
-	while (i < data->phi_count)
-	{
-		alive = is_phi_alive(data->phi_array[i]);
-		if (alive == 0)
-			return (0);
-		i++;
-	}
-	return (alive);
-}
-
-int	is_phi_alive(t_phi *phi)
-{
-	pthread_mutex_lock(&phi->data->mutex);
-	if (phi->is_alive == 0)	
-	{
-		phi->data->alive = 0;
-		pthread_mutex_unlock(&phi->data->mutex);
-		return (0);
-	}
-	if (check_last_meal(phi) == 0)
-	{
-		phi->is_alive = 0;
-		phi->data->alive = 0;
-		pthread_mutex_unlock(&phi->data->mutex);
-		return (0);
-	}
-	pthread_mutex_unlock(&phi->data->mutex);
-	return (1);
-}
 
 void	philo_taking_first_fork(t_phi *phi)
 {
@@ -188,8 +137,6 @@ void	philo_is_thinking(t_phi *phi)
 	long big_think;
 
 	output_msg(phi, "is thinking");
-	if (phi->data->phi_count % 2 == 0)
-		return; 
 	big_think = (phi->data->ttd - (phi->data->tte + phi->data->tts));
 	ft_sleep(phi, big_think / 2);
 }
@@ -209,13 +156,6 @@ int	is_phi_sated(t_phi *phi)
 	}
 	pthread_mutex_unlock(&phi->data->mutex);
 	return (1);
-}
-
-int	phi_continue(t_data *data)
-{
-	if (all_phi_alive(data) == 1 && all_phi_sated(data) == 0)
-		return (1);
-	return (0);
 }
 
 int	all_phi_sated(t_data *data)
@@ -329,28 +269,6 @@ void	philos_init(t_data *data)
 	}
 }
 
-void	ft_create_thread(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_create(&data->phi_array[i]->t_id, NULL, &philo_thread, data->phi_array[i]);
-		i++;
-	}
-}
-void	ft_join_thread(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_join(data->phi_array[i]->t_id, NULL);
-		i++;
-	}
-}
 int	main(int ac, char **av)
 {
 	int		i;

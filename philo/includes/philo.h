@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <limits.h>
+# include <pthread.h>
 # include <sys/wait.h>
 # include <sys/time.h>
 
@@ -39,14 +40,20 @@ typedef struct s_data {
 	t_phi	**phi_array;
 } t_data;
 
+void	ft_sleep(t_phi *phi, long duration);
 long	ft_timetol(tv time);
+long	ft_get_time(void);
 int		is_phi_alive(t_phi *phi);
 void	timestamp(tv start);
 void	output_msg(t_phi *phi, char *msg);
+void	output_death(t_phi *phi);
 long	ft_timetol(tv time);
-long	ft_get_time(void);
 int		has_eaten_enough(t_phi *phi);
+int		phi_continue(t_data *data);
 int		all_phi_alive(t_data *data);
 int		all_phi_sated(t_data *data);
+void	ft_create_thread(t_data *data);
+void	ft_join_thread(t_data *data);
+void	*philo_thread(void *source);
 
 #endif

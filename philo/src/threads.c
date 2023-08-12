@@ -1,41 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/12 23:44:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/12 23:44:59 by aloubier         ###   ########.fr       */
+/*   Created: 2023/08/12 23:44:52 by aloubier          #+#    #+#             */
+/*   Updated: 2023/08/12 23:44:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	ft_sleep(t_phi *phi, long duration)
+void	ft_create_thread(t_data *data)
 {
-	long	start;
+	int	i;
 
-	start = ft_get_time();
-	if (duration < 10)
+	i = 0;
+	while (i < data->phi_count)
 	{
-		return ;
-	}
-	while (ft_get_time() - start < duration && phi_continue(phi->data))
-	{
-		usleep(10);
+		pthread_create(&data->phi_array[i]->t_id, NULL, &philo_thread, data->phi_array[i]);
+		i++;
 	}
 }
 
-long	ft_timetol(tv time)
+void	ft_join_thread(t_data *data)
 {
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
+	int	i;
 
-long	ft_get_time(void)
-{
-	tv	time;
-
-	gettimeofday(&time, NULL);
-	return(ft_timetol(time));
+	i = 0;
+	while (i < data->phi_count)
+	{
+		pthread_join(data->phi_array[i]->t_id, NULL);
+		i++;
+	}
 }
