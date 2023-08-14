@@ -1,5 +1,5 @@
 #ifndef PHILO_H
-#define PHILO_H
+# define PHILO_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -9,51 +9,29 @@
 # include <pthread.h>
 # include <sys/wait.h>
 # include <sys/time.h>
+# include "philo_struct.h"
 
-typedef pthread_mutex_t mutex_t;
-typedef struct timeval tv;
-
-typedef struct s_phi {
-	pthread_t	t_id;
-	int			is_alive;
-	int			id;
-	int			meal_count;
-	int			got_forks;
-	long		last_meal_time;
-	mutex_t		*left_fork;
-	mutex_t		*right_fork;
-	struct s_data	*data;
-} t_phi;
-
-typedef struct s_data {
-	tv 		start_time;
-	int		alive;
-	int		sated;
-	long	tts;
-	long	tte;
-	long	ttd;
-	int		phi_count;
-	int		meal_limit;
-	mutex_t	*forks;
-	mutex_t	mutex;
-	mutex_t	output;
-	t_phi	**phi_array;
-} t_data;
-
+void	philos_init(t_data *data);
 void	ft_sleep(t_phi *phi, long duration);
-long	ft_timetol(tv time);
+long	ft_timetol(t_tv time);
 long	ft_get_time(void);
-int		is_phi_alive(t_phi *phi);
-void	timestamp(tv start);
+void	timestamp(t_tv start);
 void	output_msg(t_phi *phi, char *msg);
 void	output_death(t_phi *phi);
-long	ft_timetol(tv time);
-int		has_eaten_enough(t_phi *phi);
+long	ft_timetol(t_tv time);
 int		phi_continue(t_data *data);
 int		all_phi_alive(t_data *data);
+int		is_phi_alive(t_phi *phi);
+int		has_eaten_enough(t_phi *phi);
 int		all_phi_sated(t_data *data);
+void	increase_meal_count(t_phi *phi);
 void	ft_create_thread(t_data *data);
 void	ft_join_thread(t_data *data);
 void	*philo_thread(void *source);
+void	forks_init(t_data *data);
+void	forks_destroy(t_data *data);
+void	philo_taking_first_fork(t_phi *phi);
+void	philo_taking_second_fork(t_phi *phi);
+void	unlock_forks(t_phi *phi);
 
 #endif

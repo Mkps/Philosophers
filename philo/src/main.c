@@ -12,86 +12,6 @@
 
 #include "../includes/philo.h"
 
-void	init_philo(t_phi *phi, t_data *data)
-{
-	phi->data = data;
-	phi->is_alive = 1;
-	phi->last_meal_time = ft_get_time();
-	phi->got_forks = 0;
-	if (phi->data->meal_limit == -1)
-		phi->meal_count = -1;
-	else
-	 	phi->meal_count = 0;
-	phi->left_fork = &data->forks[phi->id];
-	if (phi->id == 0)
-		phi->right_fork = &data->forks[data->phi_count - 1];
-	else
-		phi->right_fork = &data->forks[phi->id - 1];
-
-}
-
-t_phi	*create_philo(int index, t_data *data)
-{
-	t_phi	*phi;
-
-
-	phi = (t_phi *)malloc(sizeof(t_phi));
-	phi->id = index;
-	init_philo(phi, data);
-	return (phi);
-}
-void	unlock_forks(t_phi *phi)
-{
-	int		forks;
-
-	pthread_mutex_lock(&phi->data->mutex);
-	forks = phi->got_forks;
-	pthread_mutex_unlock(&phi->data->mutex);
-	if (forks == 2)
-	{
-		pthread_mutex_unlock(phi->left_fork);
-		pthread_mutex_unlock(phi->right_fork);
-	}
-	else if (forks == 1)
-	{
-		if (phi->id % 2 == 0)
-			pthread_mutex_unlock(phi->left_fork);
-		else
-			pthread_mutex_unlock(phi->right_fork);
-	}
-}
-
-
-void	philo_taking_first_fork(t_phi *phi)
-{
-	if (phi->id % 2 == 0)
-		pthread_mutex_lock(phi->left_fork);
-	else
-		pthread_mutex_lock(phi->right_fork);
-	pthread_mutex_lock(&phi->data->mutex);
-	phi->got_forks = 1;
-	pthread_mutex_unlock(&phi->data->mutex);
-	output_msg(phi, "has taken a fork");	
-}
-
-void	philo_taking_second_fork(t_phi *phi)
-{
-	if (phi->id % 2 == 0)
-	{
-		if (pthread_mutex_lock(phi->right_fork) != 0)
-			pthread_mutex_unlock(phi->left_fork);
-	}
-	else
-	{
-		if (pthread_mutex_lock(phi->left_fork) != 0)
-			pthread_mutex_unlock(phi->right_fork);
-	}
-	pthread_mutex_lock(&phi->data->mutex);
-	phi->got_forks = 2;
-	pthread_mutex_unlock(&phi->data->mutex);
-	output_msg(phi, "has taken a fork");	
-}
-
 void	philo_is_taking_forks(t_phi *phi)
 {
 	if (phi->data->phi_count <= 1)
@@ -102,14 +22,6 @@ void	philo_is_taking_forks(t_phi *phi)
 	}
 	philo_taking_first_fork(phi);
 	philo_taking_second_fork(phi);
-}
-
-void	increase_meal_count(t_phi *phi)
-{
-	pthread_mutex_lock(&phi->data->mutex);
-	if (phi->meal_count != -1)
-		phi->meal_count++;
-	pthread_mutex_unlock(&phi->data->mutex);
 }
 
 void	philo_is_eating(t_phi *phi)
@@ -141,40 +53,6 @@ void	philo_is_thinking(t_phi *phi)
 	ft_sleep(phi, big_think / 2);
 }
 
-int	is_phi_sated(t_phi *phi)
-{
-	pthread_mutex_lock(&phi->data->mutex);
-	if (phi->data->meal_limit == -1)	
-	{
-		pthread_mutex_unlock(&phi->data->mutex);
-		return (0);
-	}
-	if (phi->meal_count < phi->data->meal_limit)
-	{
-		pthread_mutex_unlock(&phi->data->mutex);
-		return (0);
-	}
-	pthread_mutex_unlock(&phi->data->mutex);
-	return (1);
-}
-
-int	all_phi_sated(t_data *data)
-{
-	int		i;
-	int		sated;
-
-	i = 0;
-	sated = 1;
-	while (i < data->phi_count)
-	{
-		sated = is_phi_sated(data->phi_array[i]);
-		if (sated == 0)
-			return (0);
-		i++;
-	}
-	return (sated);
-}
-
 void	*overseer_thread(void *source)
 {
 	t_phi	*overseer;
@@ -184,10 +62,11 @@ void	*overseer_thread(void *source)
 	{
 		if (!phi_continue(overseer->data))
 			break;
-		usleep(10);
+		usleep(50);
 	}
 	return (0);
 }
+
 void	*philo_thread(void *source)
 {
 	t_phi *phi;
@@ -209,30 +88,6 @@ void	*philo_thread(void *source)
 	return(0);
 }
 
-void	forks_init(t_data *data)
-{
-	int i;
-
-	data->forks = (mutex_t *)malloc(sizeof(mutex_t) * data->phi_count);
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-}
-void	forks_destroy(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
-	free(data->forks);
-}
 void	check_args(int ac, char **av)
 {
 	(void)av;
@@ -257,25 +112,13 @@ void	init_data(t_data *data, char **av)
 	data->phi_array = (t_phi **)malloc(sizeof(t_phi *) * data->phi_count);
 }
 
-void	philos_init(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		data->phi_array[i] = create_philo(i, data);
-		i++;
-	}
-}
-
 int	main(int ac, char **av)
 {
 	int		i;
 	t_data	*data;
 	t_phi	*overseer;
-	mutex_t mutex;
-	mutex_t	output;
+	t_mutex mutex;
+	t_mutex	output;
 
 	pthread_mutex_init(&mutex, NULL);
 	pthread_mutex_init(&output, NULL);

@@ -27,15 +27,15 @@ void	ft_sleep(t_phi *phi, long duration)
 	}
 }
 
-long	ft_timetol(tv time)
+long	ft_timetol(t_tv time)
 {
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 long	ft_get_time(void)
 {
-	tv	time;
+	t_tv	time;
 
 	gettimeofday(&time, NULL);
-	return(ft_timetol(time));
+	return (ft_timetol(time));
 }

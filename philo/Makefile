@@ -16,7 +16,8 @@ INCDIR = includes
 OBJ_DIR = build
 
 SRC = $(SRCDIR)/main.c $(SRCDIR)/output.c $(SRCDIR)/time.c $(SRCDIR)/status_check.c \
-			$(SRCDIR)/threads.c
+		$(SRCDIR)/threads.c $(SRCDIR)/meal_check.c $(SRCDIR)/philo_init.c $(SRCDIR)/forks.c \
+		# $(SRCDIR)/threads.c $(SRCDIR)/threads.c 
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC = cc

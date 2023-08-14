@@ -19,7 +19,8 @@ void	ft_create_thread(t_data *data)
 	i = 0;
 	while (i < data->phi_count)
 	{
-		pthread_create(&data->phi_array[i]->t_id, NULL, &philo_thread, data->phi_array[i]);
+		pthread_create(&data->phi_array[i]->t_id, NULL,
+			&philo_thread, data->phi_array[i]);
 		i++;
 	}
 }
