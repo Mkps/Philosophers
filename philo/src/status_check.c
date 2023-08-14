@@ -43,7 +43,7 @@ int	all_phi_alive(t_data *data)
 int	is_phi_alive(t_phi *phi)
 {
 	pthread_mutex_lock(&phi->data->mutex);
-	if (phi->is_alive == 0)
+	if (phi->is_alive == 0)	
 	{
 		phi->data->alive = 0;
 		pthread_mutex_unlock(&phi->data->mutex);
@@ -66,3 +66,4 @@ int	phi_continue(t_data *data)
 		return (1);
 	return (0);
 }
+

@@ -45,3 +45,19 @@ void	output_death(t_phi *phi)
 	printf("%i died\n", phi->id + 1);
 	pthread_mutex_unlock(&phi->data->output);
 }
+
+void	output_meal_count(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->phi_count)
+	{
+		if (data->phi_array[i]->meal_count >= 0)
+		{
+			timestamp(data->start_time);	
+			printf("%i has eaten %i times\n", i + 1, data->phi_array[i]->meal_count);
+		}
+		i++;
+	}
+}

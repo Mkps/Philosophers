@@ -11,6 +11,8 @@
 # include <sys/time.h>
 # include "philo_struct.h"
 
+void	init_data(t_data *data, char **av);
+void	set_table(t_data *data);
 void	philos_init(t_data *data);
 void	ft_sleep(t_phi *phi, long duration);
 long	ft_timetol(t_tv time);
@@ -26,13 +28,20 @@ int		is_phi_alive(t_phi *phi);
 int		has_eaten_enough(t_phi *phi);
 int		all_phi_sated(t_data *data);
 void	increase_meal_count(t_phi *phi);
+void	run_thread(t_data *data);
 void	ft_create_thread(t_data *data);
 void	ft_join_thread(t_data *data);
+void	*overseer_thread(void *source);
+void	*philo_thread(void *source);
 void	*philo_thread(void *source);
 void	forks_init(t_data *data);
 void	forks_destroy(t_data *data);
 void	philo_taking_first_fork(t_phi *phi);
 void	philo_taking_second_fork(t_phi *phi);
 void	unlock_forks(t_phi *phi);
+void	philo_is_taking_forks(t_phi *phi);
+void	philo_is_eating(t_phi *phi);
+void	philo_is_sleeping(t_phi *phi);
+void	philo_is_thinking(t_phi *phi);
 
 #endif
