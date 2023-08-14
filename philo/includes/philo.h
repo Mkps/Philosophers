@@ -18,6 +18,7 @@ long	ft_get_time(void);
 void	timestamp(t_tv start);
 void	output_msg(t_phi *phi, char *msg);
 void	output_death(t_phi *phi);
+void	output_meal_count(t_data *data);
 long	ft_timetol(t_tv time);
 int		phi_continue(t_data *data);
 int		all_phi_alive(t_data *data);

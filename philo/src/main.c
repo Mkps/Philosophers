@@ -97,7 +97,14 @@ void	check_args(int ac, char **av)
 
 void	init_data(t_data *data, char **av)
 {
+	t_mutex mutex;
+	t_mutex	output;
 
+	pthread_mutex_init(&mutex, NULL);
+	pthread_mutex_init(&output, NULL);
+	// data = (t_data *)malloc(sizeof(t_data));
+	data->mutex = mutex;
+	data->output = output;
 	data->alive = 1;
 	data->sated = 0;
 	gettimeofday(&data->start_time, NULL);
@@ -112,30 +119,19 @@ void	init_data(t_data *data, char **av)
 	data->phi_array = (t_phi **)malloc(sizeof(t_phi *) * data->phi_count);
 }
 
-int	main(int ac, char **av)
+void	free_philosophers(t_data *data)
 {
-	int		i;
-	t_data	*data;
-	t_phi	*overseer;
-	t_mutex mutex;
-	t_mutex	output;
+	int	i;
 
-	pthread_mutex_init(&mutex, NULL);
-	pthread_mutex_init(&output, NULL);
-	check_args(ac, av);
-	data = (t_data *)malloc(sizeof(t_data));
-	data->mutex = mutex;
-	data->output = output;
-	overseer = (t_phi*)malloc(sizeof(t_phi));
-	overseer->data = data;
-	init_data(data, av);
-	forks_init(data);
-	philos_init(data);
-	pthread_create(&overseer->t_id, NULL, &overseer_thread, overseer);
-	ft_create_thread(data);
-	ft_join_thread(data);
-	pthread_join(overseer->t_id, NULL);
-	forks_destroy(data);
+	i = 0;
+	while (i < data->phi_count)
+		free(data->phi_array[i++]);
+}
+
+void	output_meal_count(t_data *data)
+{
+	int	i;
+
 	i = 0;
 	while (i < data->phi_count)
 	{
@@ -144,13 +140,35 @@ int	main(int ac, char **av)
 			timestamp(data->start_time);	
 			printf("%i has eaten %i times\n", i + 1, data->phi_array[i]->meal_count);
 		}
-		free(data->phi_array[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&mutex);
-	pthread_mutex_destroy(&output);
-	free(overseer);
-	free(data->phi_array);
-	free(data);
+}
+
+void	set_table(t_data *data)
+{
+	data->overseer = (t_phi*)malloc(sizeof(t_phi));
+	data->overseer->data = data;
+	forks_init(data);
+	philos_init(data);
+}
+
+int	main(int ac, char **av)
+{
+	t_data	data;
+
+	check_args(ac, av);
+	init_data(&data, av);
+	set_table(&data);
+	pthread_create(&data.overseer->t_id, NULL, &overseer_thread, data.overseer);
+	ft_create_thread(&data);
+	ft_join_thread(&data);
+	pthread_join(data.overseer->t_id, NULL);
+	forks_destroy(&data);
+	pthread_mutex_destroy(&data.mutex);
+	pthread_mutex_destroy(&data.output);
+	// output_meal_count(&data);
+	free_philosophers(&data);
+	free(data.overseer);
+	free(data.phi_array);
 	return (0);
 }

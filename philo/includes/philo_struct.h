@@ -31,6 +31,7 @@ typedef struct s_data {
 	t_mutex	mutex;
 	t_mutex	output;
 	t_phi	**phi_array;
+	t_phi	*overseer;
 }	t_data;
 
 #endif
