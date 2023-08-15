@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   forks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/15 12:32:07 by aloubier          #+#    #+#             */
+/*   Updated: 2023/08/15 12:41:48 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 void	forks_init(t_data *data)
@@ -64,12 +76,10 @@ void	philo_taking_second_fork(t_phi *phi)
 	if (phi->id % 2 == 0)
 	{
 		pthread_mutex_lock(phi->right_fork);
-			// pthread_mutex_unlock(phi->left_fork);
 	}
 	else
 	{
 		pthread_mutex_lock(phi->left_fork);
-			// pthread_mutex_unlock(phi->right_fork);
 	}
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 2;

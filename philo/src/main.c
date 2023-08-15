@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/12 23:44:30 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/15 12:37:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	check_args(int ac, char **av)
 		i++;
 	}
 }
+
 int	main(int ac, char **av)
 {
 	t_data	data;

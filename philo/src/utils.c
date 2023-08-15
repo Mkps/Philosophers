@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/15 12:32:53 by aloubier          #+#    #+#             */
+/*   Updated: 2023/08/15 12:35:33 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 int	is_digit(char *arg)
@@ -14,8 +26,8 @@ int	is_digit(char *arg)
 		i++;
 	}
 	return (0);
- }
- 
+}
+
 long	ft_atol(const char *str)
 {
 	long	atol;
@@ -31,7 +43,7 @@ long	ft_atol(const char *str)
 	{
 		if (str[i] == '-')
 			sign = -1;
-	i++;
+		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
@@ -80,17 +92,12 @@ int	check_input(char *arg)
 	return (0);
 }
 
-int	ft_strlen(char *str)
+void	ft_putstr(char *str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 		i++;
-	return (i);
-}
-
-void	ft_putstr(char *str)
-{
-	write(1, str, ft_strlen(str));
+	write(1, str, i);
 }

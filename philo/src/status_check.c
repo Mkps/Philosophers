@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:44 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/12 23:44:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/15 12:35:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	all_phi_alive(t_data *data)
 int	is_phi_alive(t_phi *phi)
 {
 	pthread_mutex_lock(&phi->data->mutex);
-	if (phi->is_alive == 0)	
+	if (phi->is_alive == 0)
 	{
 		phi->data->alive = 0;
 		pthread_mutex_unlock(&phi->data->mutex);
@@ -66,4 +66,3 @@ int	phi_continue(t_data *data)
 		return (1);
 	return (0);
 }
-

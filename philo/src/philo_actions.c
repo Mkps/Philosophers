@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_actions.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/15 12:32:42 by aloubier          #+#    #+#             */
+/*   Updated: 2023/08/15 12:37:34 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 void	philo_is_taking_forks(t_phi *phi)
@@ -14,7 +26,8 @@ void	philo_is_taking_forks(t_phi *phi)
 
 void	philo_is_eating(t_phi *phi)
 {
-	output_msg(phi, "is eating");
+	if (phi_continue(phi->data))
+		output_msg(phi, "is eating");
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->last_meal_time = ft_get_time();
 	pthread_mutex_unlock(&phi->data->mutex);
@@ -34,10 +47,9 @@ void	philo_is_sleeping(t_phi *phi)
 
 void	philo_is_thinking(t_phi *phi)
 {
-	long big_think;
+	long	big_think;
 
 	output_msg(phi, "is thinking");
 	big_think = (phi->data->ttd - (phi->data->tte + phi->data->tts));
 	ft_sleep(phi, big_think / 2);
 }
-

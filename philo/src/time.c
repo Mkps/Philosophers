@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/12 23:44:59 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/15 12:47:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ void	ft_sleep(t_phi *phi, long duration)
 	start = ft_get_time();
 	if (duration < 10)
 	{
+		usleep(100);
 		return ;
 	}
 	while (ft_get_time() - start < duration && phi_continue(phi->data))
 	{
-		usleep(10);
+		usleep(100);
 	}
 }
 
@@ -38,4 +39,27 @@ long	ft_get_time(void)
 
 	gettimeofday(&time, NULL);
 	return (ft_timetol(time));
+}
+
+void	ft_philo_q(t_phi *phi)
+{
+	t_data	*data;
+
+	data = phi->data; 
+	if (data->phi_count % 2 == 0)
+	{
+		if (phi->id % 2 != 0)
+		{
+			ft_sleep(phi, 10);
+			output_msg(phi, "is thinking");
+		}
+	}
+	else if (data->phi_count % 2 != 0)
+	{
+		if (phi->id % 2 == 0)
+		{
+			ft_sleep(phi, 10);
+			output_msg(phi, "is thinking");
+		}
+	}
 }
