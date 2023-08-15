@@ -11,31 +11,16 @@
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <semaphore.h>
 
 void	forks_init(t_data *data)
 {
-	int	i;
-
-	data->forks = (t_mutex *)malloc(sizeof(t_mutex) * data->phi_count);
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
+	sem_init(&data->sem_forks, 1, data->phi_count);
 }
 
 void	forks_destroy(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
-	free(data->forks);
+	sem_destroy(&data->sem_forks);
 }
 
 void	unlock_forks(t_phi *phi)
@@ -47,24 +32,18 @@ void	unlock_forks(t_phi *phi)
 	pthread_mutex_unlock(&phi->data->mutex);
 	if (forks == 2)
 	{
-		pthread_mutex_unlock(phi->left_fork);
-		pthread_mutex_unlock(phi->right_fork);
+		sem_post(&phi->data->sem_forks);
+		sem_post(&phi->data->sem_forks);
 	}
 	else if (forks == 1)
 	{
-		if (phi->id % 2 == 0)
-			pthread_mutex_unlock(phi->left_fork);
-		else
-			pthread_mutex_unlock(phi->right_fork);
+		sem_post(&phi->data->sem_forks);
 	}
 }
 
 void	philo_taking_first_fork(t_phi *phi)
 {
-	if (phi->id % 2 == 0)
-		pthread_mutex_lock(phi->left_fork);
-	else
-		pthread_mutex_lock(phi->right_fork);
+	sem_wait(&phi->data->sem_forks);
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 1;
 	pthread_mutex_unlock(&phi->data->mutex);
@@ -73,14 +52,7 @@ void	philo_taking_first_fork(t_phi *phi)
 
 void	philo_taking_second_fork(t_phi *phi)
 {
-	if (phi->id % 2 == 0)
-	{
-		pthread_mutex_lock(phi->right_fork);
-	}
-	else
-	{
-		pthread_mutex_lock(phi->left_fork);
-	}
+	sem_wait(&phi->data->sem_forks);
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 2;
 	pthread_mutex_unlock(&phi->data->mutex);

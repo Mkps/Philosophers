@@ -47,9 +47,10 @@ void	philo_is_sleeping(t_phi *phi)
 
 void	philo_is_thinking(t_phi *phi)
 {
-	long	big_think;
+	// long	big_think;
 
 	output_msg(phi, "is thinking");
-	big_think = (phi->data->ttd - (phi->data->tte + phi->data->tts));
-	ft_sleep(phi, big_think / 2);
+	// big_think = (phi->data->ttd - (phi->data->tte + phi->data->tts));
+	usleep(100);
+	// ft_sleep(phi, big_think / 4);
 }

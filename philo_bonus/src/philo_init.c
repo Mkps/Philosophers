@@ -22,11 +22,6 @@ static void	init_philo(t_phi *phi, t_data *data)
 		phi->meal_count = -1;
 	else
 		phi->meal_count = 0;
-	phi->left_fork = &data->forks[phi->id];
-	if (phi->id == 0)
-		phi->right_fork = &data->forks[data->phi_count - 1];
-	else
-		phi->right_fork = &data->forks[phi->id - 1];
 }
 
 static t_phi	*create_philo(int index, t_data *data)
