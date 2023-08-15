@@ -63,13 +63,13 @@ void	philo_taking_second_fork(t_phi *phi)
 {
 	if (phi->id % 2 == 0)
 	{
-		if (pthread_mutex_lock(phi->right_fork) != 0)
-			pthread_mutex_unlock(phi->left_fork);
+		pthread_mutex_lock(phi->right_fork);
+			// pthread_mutex_unlock(phi->left_fork);
 	}
 	else
 	{
-		if (pthread_mutex_lock(phi->left_fork) != 0)
-			pthread_mutex_unlock(phi->right_fork);
+		pthread_mutex_lock(phi->left_fork);
+			// pthread_mutex_unlock(phi->right_fork);
 	}
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 2;

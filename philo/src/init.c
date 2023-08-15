@@ -12,12 +12,12 @@ void	init_data(t_data *data, char **av)
 	data->alive = 1;
 	data->sated = 0;
 	gettimeofday(&data->start_time, NULL);
-	data->phi_count = atoi(av[1]);
-	data->ttd = atol(av[2]);
-	data->tte = atoi(av[3]);
-	data->tts = atol(av[4]);
+	data->phi_count = ft_atol(av[1]);
+	data->ttd = ft_atol(av[2]);
+	data->tte = ft_atol(av[3]);
+	data->tts = ft_atol(av[4]);
 	if (av[5] != NULL)
-		data->meal_limit = atoi(av[5]);
+		data->meal_limit = ft_atol(av[5]);
 	else
 		data->meal_limit = -1;
 	data->phi_array = (t_phi **)malloc(sizeof(t_phi *) * data->phi_count);

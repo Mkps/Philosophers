@@ -14,28 +14,22 @@
 
 void	check_args(int ac, char **av)
 {
-	(void)av;
-	if (ac != 5 && ac != 6)
-		exit(1);
-}
-
-void	free_philosophers(t_data *data)
-{
 	int	i;
 
-	i = 0;
-	while (i < data->phi_count)
-		free(data->phi_array[i++]);
-}
-
-void	cleanup_data(t_data *data)
-{
-	forks_destroy(data);
-	pthread_mutex_destroy(&data->mutex);
-	pthread_mutex_destroy(&data->output);
-	free_philosophers(data);
-	free(data->overseer);
-	free(data->phi_array);
+	if (ac != 5 && ac != 6)
+	{
+		printf("Incorrect parameter number. Correct use is:\n");
+		printf ("./philo [nb_of_philosophers][time until death][time to eat]");
+		printf("[time to sleep] Optional: [Number of meal]\n");
+		exit(1);
+	}
+	i = 1;
+	while (i < ac)
+	{
+		if (check_input(av[i]))
+			exit (1);
+		i++;
+	}
 }
 int	main(int ac, char **av)
 {
