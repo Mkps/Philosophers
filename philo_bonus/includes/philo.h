@@ -21,6 +21,7 @@
 # include <pthread.h>
 # include <sys/wait.h>
 # include <sys/time.h>
+# include <fcntl.h>
 # include "philo_struct.h"
 
 void	init_data(t_data *data, char **av);
@@ -36,11 +37,12 @@ void	output_death(t_phi *phi);
 void	output_meal_count(t_data *data);
 void	ft_putstr(char *str);
 long	ft_timetol(t_tv time);
-int		phi_continue(t_data *data);
+int		phi_continue(t_phi *phi);
 int		all_phi_alive(t_data *data);
 int		is_phi_alive(t_phi *phi);
 int		has_eaten_enough(t_phi *phi);
 int		all_phi_sated(t_data *data);
+int		is_phi_sated(t_phi *phi);
 void	increase_meal_count(t_phi *phi);
 void	run_thread(t_data *data);
 void	ft_create_thread(t_data *data);

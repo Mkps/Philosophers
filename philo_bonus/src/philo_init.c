@@ -12,9 +12,21 @@
 
 #include "../includes/philo.h"
 
-static void	init_philo(t_phi *phi, t_data *data)
+// static void	init_philo(t_phi *phi, t_data *data)
+// {
+// 	phi->data = data;
+// 	phi->is_alive = 1;
+// 	phi->last_meal_time = ft_get_time();
+// 	phi->got_forks = 0;
+// 	if (phi->data->meal_limit == -1)
+// 		phi->meal_count = -1;
+// 	else
+// 		phi->meal_count = 0;
+// }
+//
+static void	create_philo(int index, t_phi *phi)
 {
-	phi->data = data;
+	phi->id = index;
 	phi->is_alive = 1;
 	phi->last_meal_time = ft_get_time();
 	phi->got_forks = 0;
@@ -22,16 +34,7 @@ static void	init_philo(t_phi *phi, t_data *data)
 		phi->meal_count = -1;
 	else
 		phi->meal_count = 0;
-}
-
-static t_phi	*create_philo(int index, t_data *data)
-{
-	t_phi	*phi;
-
-	phi = (t_phi *)malloc(sizeof(t_phi));
-	phi->id = index;
-	init_philo(phi, data);
-	return (phi);
+	// init_philo(&data->phi_array[index], data);
 }
 
 void	philos_init(t_data *data)
@@ -41,7 +44,8 @@ void	philos_init(t_data *data)
 	i = 0;
 	while (i < data->phi_count)
 	{
-		data->phi_array[i] = create_philo(i, data);
+		data->phi_array[i].data = data;
+		create_philo(i, &data->phi_array[i]);
 		i++;
 	}
 }

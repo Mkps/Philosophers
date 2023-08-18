@@ -25,25 +25,26 @@ void	output_msg(t_phi *phi, char *msg)
 	int	alive;
 	int	sated;
 
-	pthread_mutex_lock(&phi->data->mutex);
+	sem_wait(phi->data->sem_data);
 	alive = phi->data->alive;
 	sated = phi->data->sated;
-	pthread_mutex_unlock(&phi->data->mutex);
+	sem_post(phi->data->sem_data);
 	if (alive && !sated)
 	{
-		pthread_mutex_lock(&phi->data->output);
+		sem_wait(phi->data->sem_output);
 		timestamp(phi->data->start_time);
 		printf("%i %s\n", phi->id + 1, msg);
-		pthread_mutex_unlock(&phi->data->output);
+		sem_post(phi->data->sem_output);
 	}
 }
 
 void	output_death(t_phi *phi)
 {
-	pthread_mutex_lock(&phi->data->output);
+	sem_wait(phi->data->sem_output);
 	timestamp(phi->data->start_time);
 	printf("%i died\n", phi->id + 1);
-	pthread_mutex_unlock(&phi->data->output);
+	return ;
+	// sem_post(phi->data->sem_output);
 }
 
 void	output_meal_count(t_data *data)
@@ -53,11 +54,11 @@ void	output_meal_count(t_data *data)
 	i = 0;
 	while (i < data->phi_count)
 	{
-		if (data->phi_array[i]->meal_count >= 0)
+		if (data->phi_array[i].meal_count >= 0)
 		{
 			timestamp(data->start_time);
 			printf("%i has eaten %i times\n", i + 1, 
-				data->phi_array[i]->meal_count);
+				data->phi_array[i].meal_count);
 		}
 		i++;
 	}

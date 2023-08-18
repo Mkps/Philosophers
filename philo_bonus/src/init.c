@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <semaphore.h>
 
 void	init_data(t_data *data, char **av)
 {
-	t_mutex	mutex;
-	t_mutex	output;
-
-	pthread_mutex_init(&mutex, NULL);
-	pthread_mutex_init(&output, NULL);
-	data->mutex = mutex;
-	data->output = output;
+	sem_unlink("sem_data");
+	data->sem_data = sem_open("sem_data", O_CREAT, 0600, 1);
+	sem_unlink("sem_output");
+	data->sem_output = sem_open("sem_output", O_CREAT, 0600, 1);
+	sem_unlink("sem_continue");
+	data->sem_continue = sem_open("sem_continue", O_CREAT, 0600, 1);
 	data->alive = 1;
 	data->sated = 0;
 	gettimeofday(&data->start_time, NULL);
@@ -32,13 +32,11 @@ void	init_data(t_data *data, char **av)
 		data->meal_limit = ft_atol(av[5]);
 	else
 		data->meal_limit = -1;
-	data->phi_array = (t_phi **)malloc(sizeof(t_phi *) * data->phi_count);
+	data->phi_array = (t_phi *)malloc(sizeof(t_phi) * data->phi_count);
 }
 
 void	set_table(t_data *data)
 {
-	data->overseer = (t_phi *)malloc(sizeof(t_phi));
-	data->overseer->data = data;
 	forks_init(data);
 	philos_init(data);
 }

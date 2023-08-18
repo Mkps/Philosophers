@@ -14,19 +14,20 @@
 # define PHILO_STRUCT_H
 
 # include <pthread.h>
+# include <semaphore.h>
+#include <unistd.h>
 
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_tv;
 
 typedef struct s_phi {
 	pthread_t		t_id;
+	pid_t			pid;
 	int				is_alive;
 	int				id;
 	int				meal_count;
 	int				got_forks;
 	long			last_meal_time;
-	t_mutex			*left_fork;
-	t_mutex			*right_fork;
 	struct s_data	*data;
 }	t_phi;
 
@@ -39,11 +40,11 @@ typedef struct s_data {
 	long	ttd;
 	int		phi_count;
 	int		meal_limit;
-	t_mutex	*forks;
-	t_mutex	mutex;
-	t_mutex	output;
-	t_phi	**phi_array;
-	t_phi	*overseer;
+	sem_t	*sem_forks;
+	sem_t	*sem_data;
+	sem_t	*sem_output;
+	sem_t	*sem_continue;
+	t_phi	*phi_array;
 }	t_data;
 
 #endif

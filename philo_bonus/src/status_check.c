@@ -16,6 +16,8 @@ int	check_last_meal(t_phi *phi)
 {
 	if (ft_get_time() - phi->last_meal_time >= phi->data->ttd)
 	{
+		// printf("time is %ld last meal is %ld result is %ld\n", ft_get_time(), phi->last_meal_time, ft_get_time() - phi->last_meal_time);
+		// printf("heded?");
 		if (phi->data->alive != 0)
 			output_death(phi);
 		return (0);
@@ -32,7 +34,7 @@ int	all_phi_alive(t_data *data)
 	alive = 1;
 	while (i < data->phi_count)
 	{
-		alive = is_phi_alive(data->phi_array[i]);
+		alive = is_phi_alive(&data->phi_array[i]);
 		if (alive == 0)
 			return (0);
 		i++;
@@ -42,27 +44,59 @@ int	all_phi_alive(t_data *data)
 
 int	is_phi_alive(t_phi *phi)
 {
-	pthread_mutex_lock(&phi->data->mutex);
+	sem_wait(phi->data->sem_data);
 	if (phi->is_alive == 0)
 	{
+		// printf("ded of dedness");
 		phi->data->alive = 0;
-		pthread_mutex_unlock(&phi->data->mutex);
+		sem_post(phi->data->sem_data);
 		return (0);
 	}
 	if (check_last_meal(phi) == 0)
 	{
+		// printf("ded of nofoodness");
 		phi->is_alive = 0;
 		phi->data->alive = 0;
-		pthread_mutex_unlock(&phi->data->mutex);
+		sem_post(phi->data->sem_data);
 		return (0);
 	}
-	pthread_mutex_unlock(&phi->data->mutex);
+	sem_post(phi->data->sem_data);
 	return (1);
 }
 
-int	phi_continue(t_data *data)
+int	phi_continue(t_phi *phi)
 {
-	if (all_phi_alive(data) == 1 && all_phi_sated(data) == 0)
-		return (1);
-	return (0);
+	int	alive;
+	int	sated;
+
+	alive = is_phi_alive(phi);
+	sated = is_phi_sated(phi);
+	// if (alive == 1 && sated == 0)
+	// 	return (1);
+	if (alive == 0)
+	{
+		// sem_post(phi->data->sem_continue);
+		phi->is_alive = 0;
+		return (0);
+	}
+	else if (sated == 1)
+	{
+		if (phi->data->sated == 1)
+		{
+			// printf("NOMNOMNOM %i %i\n", phi->id + 1, phi->data->sated);
+			// sem_post(phi->data->sem_continue);
+			// free(phi->data->phi_array);
+			// sem_close(phi->data->sem_continue);
+			// sem_close(phi->data->sem_output);
+			// sem_close(phi->data->sem_data);
+			// sem_close(phi->data->sem_forks);
+			// sem_post(phi->data->sem_continue);
+			// exit (0);
+			return (0);
+		}
+	}
+	// printf("nocontinue");
+	// free(phi->data->phi_array);
+	// sem_post(phi->data->sem_continue);
+	return (1);
 }

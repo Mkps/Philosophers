@@ -23,7 +23,7 @@ void	ft_sleep(t_phi *phi, long duration)
 		// usleep(10);
 		return ;
 	}
-	while (ft_get_time() - start < duration && phi_continue(phi->data))
+	while (ft_get_time() - start < duration && is_phi_alive(phi))
 	{
 		usleep(100);
 	}
