@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:43:57 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:43:58 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:11:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <pthread.h>
 # include <semaphore.h>
-#include <unistd.h>
+# include <unistd.h>
 
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_tv;
@@ -34,23 +34,23 @@ typedef struct s_phi {
 }	t_phi;
 
 typedef struct s_data {
-	long	start_time;
-	int		alive;
-	int		sated;
-	int		continuer;
-	long	tts;
-	long	tte;
-	long	ttd;
-	int		phi_count;
-	int		meal_limit;
-	sem_t	*sem_forks;
-	sem_t	*sem_data;
-	sem_t	*sem_output;
-	sem_t	*sem_continue;
-	sem_t	*sem_death;
-	sem_t	*sem_sated;
-	t_phi	*phi_array;
-	t_phi	*current_phi;
+	long		start_time;
+	int			alive;
+	int			sated;
+	int			continuer;
+	long		tts;
+	long		tte;
+	long		ttd;
+	int			phi_count;
+	int			meal_limit;
+	sem_t		*sem_forks;
+	sem_t		*sem_data;
+	sem_t		*sem_output;
+	sem_t		*sem_continue;
+	sem_t		*sem_death;
+	sem_t		*sem_sated;
+	t_phi		*phi_array;
+	t_phi		*current_phi;
 	pthread_t	sated_thread;
 	pthread_t	death_thread;
 }	t_data;

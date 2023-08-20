@@ -6,14 +6,14 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:37:34 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:25:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
 void	philo_is_taking_forks(t_phi *phi)
-{ 
+{
 	if (phi->data->phi_count <= 1)
 	{
 		ft_sleep(phi, phi->data->ttd + 10);

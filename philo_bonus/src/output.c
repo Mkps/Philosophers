@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:36 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:36:31 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:24:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,6 @@ void	output_death(t_phi *phi)
 	timestamp(phi);
 	printf("%i died\n", phi->id + 1);
 	phi->is_alive = 0;
-	// sem_post(phi->data->sem_output);
-	// sem_post(phi->data->sem_death);
-	// sem_close(phi->data->sem_continue);
-	// sem_close(phi->data->sem_output);
-	// sem_close(phi->data->sem_data);
-	// sem_close(phi->data->sem_forks);
-	// free(phi->data->phi_array);	
-	// sem_post(phi->data->sem_output);
 	return ;
 }
 

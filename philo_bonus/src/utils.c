@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:53 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:35:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:22:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,6 @@ int	check_input(char *arg)
 	if (is_valid_value(arg) != 0)
 		return (1);
 	return (0);
-}
-
-void	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	write(1, str, i);
 }
 
 int	data_continue(t_data *data)

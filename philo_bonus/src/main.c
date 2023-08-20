@@ -6,13 +6,14 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:37:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:37:43 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
 int		ft_spawn_philo(t_data *data);
+
 void	check_args(int ac, char **av)
 {
 	int	i;
@@ -22,7 +23,7 @@ void	check_args(int ac, char **av)
 		printf("Incorrect parameter number. Correct use is:\n");
 		printf ("./philo [nb_of_philosophers][time until death][time to eat]");
 		printf("[time to sleep] Optional: [Number of meal]\n");
-		exit(1);
+		exit(0);
 	}
 	i = 1;
 	while (i < ac)
@@ -32,7 +33,8 @@ void	check_args(int ac, char **av)
 		i++;
 	}
 }
-int	ft_get_child(t_data *data, t_phi* phi)
+
+int	ft_get_child(t_data *data, t_phi *phi)
 {
 	int	phi_exit_code;
 	int	exit_code;
@@ -55,12 +57,13 @@ int	ft_get_child(t_data *data, t_phi* phi)
 	}
 	return (0);
 }
+
 int	stop_process(t_data *data)
 {
 	int	i;
 	int	exit_code;
 
-	while(data_continue(data))
+	while (data_continue(data))
 	{
 		i = 0;
 		while (i < data->phi_count)
@@ -87,7 +90,7 @@ int	main(int ac, char **av)
 
 	check_args(ac, av);
 	init_data(&data, av);
-	set_table(&data);
+	philos_init(&data);
 	ft_spawn_philo(&data);
 	cleanup_data(&data);
 	exit (0);

@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:44:07 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:47:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:32:31 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <fcntl.h>
 # include "philo_struct.h"
 
+int	status_check(t_data *data);
+void	child_exit(t_data *data, int exit_code);
 int		kill_all_phi(t_data *data, int exit_code);
 void	init_data(t_data *data, char **av);
 void	set_table(t_data *data);
@@ -36,17 +38,10 @@ void	timestamp(t_phi *phi);
 void	output_msg(t_phi *phi, char *msg);
 void	output_death(t_phi *phi);
 void	output_meal_count(t_data *data);
-void	ft_putstr(char *str);
 long	ft_timetol(t_tv time);
 int		phi_continue(t_phi *phi);
-int		all_phi_alive(t_data *data);
-int		is_phi_alive(t_phi *phi);
 int		has_eaten_enough(t_phi *phi);
-int		all_phi_sated(t_data *data);
-int		is_phi_sated(t_phi *phi);
-void	increase_meal_count(t_phi *phi);
 void	run_process(t_data *data);
-void	ft_create_thread(t_data *data);
 void	ft_join_thread(t_data *data);
 void	*overseer_thread(void *source);
 void	*philo_thread(void *source);

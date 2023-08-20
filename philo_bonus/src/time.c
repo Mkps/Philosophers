@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:47:14 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:30:44 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,10 @@ void	ft_philo_q(t_phi *phi)
 			output_msg(phi, "is thinking");
 		}
 	}
+}
+
+void	wait_start(t_data *data)
+{
+	while (ft_get_time() < data->start_time)
+		continue ;
 }

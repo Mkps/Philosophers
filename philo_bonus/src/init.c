@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:38:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 01:35:39 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	init_error(t_data *data)
 {
 	printf("Error initializing data.\n");
-	if (data->sem_data)			
+	if (data->sem_data)
 		sem_close(data->sem_data);
 	if (data->sem_death)
 		sem_close(data->sem_death);
@@ -28,12 +28,14 @@ void	init_error(t_data *data)
 		free(data->phi_array);
 	exit (1);
 }
-int		error_exit(t_data *data)
+
+int	error_exit(t_data *data)
 {
 	if (data->phi_array)
 		free(data->phi_array);
 	return (0);
 }
+
 void	unlink_semaphores(void)
 {
 	sem_unlink("/sem_forks");
@@ -43,14 +45,15 @@ void	unlink_semaphores(void)
 	sem_unlink("/sem_death");
 	sem_unlink("/sem_sated");
 }
-int		init_semaphores(t_data *data)
+
+int	init_semaphores(t_data *data)
 {
 	unlink_semaphores();
 	data->sem_forks = sem_open("/sem_forks", O_CREAT, 0600, data->phi_count);
 	if (data->sem_forks == SEM_FAILED)
 		error_exit(data);
 	data->sem_data = sem_open("/sem_data", O_CREAT, 0600, 1);
-	if (data->sem_data== SEM_FAILED)
+	if (data->sem_data == SEM_FAILED)
 		error_exit(data);
 	data->sem_output = sem_open("/sem_output", O_CREAT, 0600, 1);
 	if (data->sem_output == SEM_FAILED)
@@ -84,10 +87,4 @@ void	init_data(t_data *data, char **av)
 	data->phi_array = (t_phi *)malloc(sizeof(t_phi) * data->phi_count);
 	if (!data->phi_array)
 		init_error(data);
-}
-
-void	set_table(t_data *data)
-{
-	// forks_init(data);
-	philos_init(data);
 }
