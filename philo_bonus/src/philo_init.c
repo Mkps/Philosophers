@@ -28,13 +28,12 @@ static void	create_philo(int index, t_phi *phi)
 {
 	phi->id = index;
 	phi->is_alive = 1;
-	phi->last_meal_time = ft_get_time();
+	phi->last_meal_time = phi->data->start_time;
 	phi->got_forks = 0;
 	if (phi->data->meal_limit == -1)
 		phi->meal_count = -1;
 	else
 		phi->meal_count = 0;
-	// init_philo(&data->phi_array[index], data);
 }
 
 void	philos_init(t_data *data)

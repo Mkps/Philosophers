@@ -22,7 +22,7 @@ OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR)
+CFLAGS = -Wall -Wextra -Werror -pthread -I$(INCDIR)
 
 all: $(NAME)
 

@@ -11,117 +11,164 @@
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <bits/pthreadtypes.h>
 #include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-void	ft_create_thread(t_data *data)
+void	wait_start(t_data *data);
+int		error_exit(t_data *data);
+void	philo_routine(t_phi *phi);
+
+void	child_exit(t_data *data, int exit_code)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->phi_count)
-	{
-		data->phi_array[i].pid = fork();
-		if (data->phi_array[i].pid == 0)
-		{
-			philo_thread(&data->phi_array[i]);
-			sem_close(data->sem_continue);
-			sem_close(data->sem_output);
-			sem_close(data->sem_data);
-			sem_close(data->sem_forks);
-			if (data->phi_array[i].is_alive == 0)
-			{
-				free(data->phi_array);
-				exit (1);
-
-			}
-			free(data->phi_array);
-			exit (0);
-		}
-		i++;
-	}
-	ft_join_thread(data);
-	sem_post(data->sem_continue);
-	return ;
+	sem_post(data->sem_sated);
+	pthread_join(data->current_phi->overseer, NULL);
+	if (exit_code == -1)
+		printf("error opening semaphore");
+	if (exit_code == -2)
+		printf("error opening thread");
+	sem_close(data->sem_sated);
+	sem_close(data->sem_death);
+	sem_close(data->sem_data);
+	sem_close(data->sem_forks);
+	sem_close(data->sem_output);
+	free(data->phi_array);
+	exit(exit_code);
 }
 
-void	ft_join_thread(t_data *data)
+void	*check_sated_thread(void *src)
+{
+	t_data *data;
+
+	data = (t_data *)src;
+	if (data->meal_limit == -1 || data->ttd == 0 || data->phi_count == 1)
+		return (NULL);
+	wait_start(data);
+	while (data->sated < data->phi_count)
+	{
+		if (!data_continue(data))
+			return (NULL);
+		sem_wait(data->sem_sated);
+		if (data_continue(data))
+			data->sated++;
+		else
+			return (NULL);
+	}
+	sem_wait(data->sem_continue);
+	data->continuer = 0;
+	kill_all_phi(data, EXIT_SUCCESS);
+	sem_post(data->sem_death);
+	sem_post(data->sem_continue);
+	return (NULL);
+}
+
+void	*check_death_thread(void *src)
+{
+	t_data	*data;
+
+	data = (t_data *)src;
+	wait_start(data);
+	if (!data_continue(data))
+		return(NULL);
+	sem_wait(data->sem_death);
+	if (!data_continue(data))
+		return (NULL);
+	sem_wait(data->sem_continue);
+	data->continuer = 0;
+	kill_all_phi(data, EXIT_SUCCESS);
+	sem_post(data->sem_sated);
+	sem_post(data->sem_continue);
+	return (NULL);
+}
+
+int	status_check(t_data *data)
+{
+	if (pthread_create(&data->sated_thread, NULL, check_sated_thread, data) != 0)
+		return (error_exit(data));
+	if (pthread_create(&data->death_thread, NULL, check_death_thread, data) != 0)
+		return (error_exit(data));
+	return (0);
+}
+
+void	run_process(t_data *data)
+{
+	t_phi	*phi;
+
+	phi = data->current_phi;
+	pthread_create(&phi->overseer, NULL, &overseer_thread, data);
+	if (data->meal_limit == 0)
+	{
+		sem_post(data->sem_sated);
+		child_exit(data, 2);
+	}
+	if (data->ttd == 0)
+	{
+		sem_post(data->sem_death);
+		child_exit(data, 3);
+	}
+	wait_start(data);
+	philo_routine(phi);
+}
+
+int		ft_spawn_philo(t_data *data)
 {
 	int	i;
-	// int	count;
-	int	status;
+	pid_t	pid;
 
-	i = 0;
-	status = 0;
-	// count = 0;
-	while (i < data->phi_count)
+	i = -1;
+	while (++i < data->phi_count)
 	{
-		// printf("got a process");
-		waitpid(-1, &status, 0);
-		if (status != 0)
+		pid = fork();
+		if (pid == -1)
+			printf("error forking process\n");
+		if (pid > 0)
+			data->phi_array[i].pid = pid;
+		if (!pid)
 		{
-			i = -1;
-			while (++i < data->phi_count)
-				kill(data->phi_array[i].pid, SIGKILL);
-			break;
+			data->current_phi = &data->phi_array[i];
+			data->current_phi->data = data;
+			data->current_phi->is_sated = 0;
+			run_process(data);
 		}
-		// printf("count2 = %i\n", count);
-		// printf("got a process");
-		// if (count == data->phi_count)
-		// 	sem_post(data->sem_continue);// while (i < data->phi_count)
-		i++;
 	}
+	if (status_check(data) == 1)
+		return (1);
+	return (0);
 }
 
 void	*overseer_thread(void *source)
 {
-	// t_phi	*overseer;
-	(void)source;
+	t_data	*data;
 
-	// overseer = (t_phi *)source;
+	data = (t_data *)source;
+	if (data->meal_limit == 0)
+		return (NULL);
+	sem_wait(data->sem_death);
+	sem_wait(data->sem_sated);
+	wait_start(data);
+	while (phi_continue(data->current_phi))
+	{
+		usleep(100);
+		continue ;
+	}
+	return (NULL);
+}
+
+void	wait_start(t_data *data)
+{
+	while (ft_get_time() < data->start_time)
+		continue ;	
+}
+
+void	philo_routine(t_phi *phi)
+{
+	ft_philo_q(phi);
 	while (1)
 	{
-		// if (!phi_continue(overseer->data))
-			break ;
-		usleep(50);
+		philo_is_taking_forks(phi);
+		philo_is_eating(phi);
+		philo_is_sleeping(phi);
+		philo_is_thinking(phi);
 	}
-	return (0);
-}
-
-void	*philo_thread(void *source)
-{
-	t_phi	*phi;
-	// t_data	*data;
-
-	phi = (t_phi *)source;
-	// data = phi->data; 
-	ft_philo_q(phi);
-	// printf("entered thread");
-	while (phi_continue(phi))
-	{
-		if (phi_continue(phi))
-			philo_is_taking_forks(phi);
-		if (phi_continue(phi))
-			philo_is_eating(phi);
-		if (phi_continue(phi))
-			philo_is_sleeping(phi);
-		if (phi_continue(phi))
-			philo_is_thinking(phi);
-		// printf("keep going");
-	}
-	printf("phi %i is done\n", phi->id+1);
-	unlock_forks(phi);
-	return (0);
-}
-
-void	run_thread(t_data *data)
-{
-	int	i;
-	
-	sem_wait(data->sem_continue);
-	ft_create_thread(data);
-	sem_wait(data->sem_continue);
-	i = -1;
-	while (++i < data->phi_count)
-		kill(data->phi_array[i].pid, SIGKILL);
-	// ft_join_thread(data);
 }

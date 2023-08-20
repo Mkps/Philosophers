@@ -12,12 +12,12 @@
 
 #include "../includes/philo.h"
 
-void	timestamp(t_tv start)
+void	timestamp(t_phi *phi)
 {
 	t_tv	end;
 
 	gettimeofday(&end, NULL);
-	printf("%ld ", (ft_timetol(end) - ft_timetol(start)));
+	printf("%ld ", (ft_timetol(end) - phi->data->start_time));
 }
 
 void	output_msg(t_phi *phi, char *msg)
@@ -32,7 +32,7 @@ void	output_msg(t_phi *phi, char *msg)
 	if (alive && !sated)
 	{
 		sem_wait(phi->data->sem_output);
-		timestamp(phi->data->start_time);
+		timestamp(phi);
 		printf("%i %s\n", phi->id + 1, msg);
 		sem_post(phi->data->sem_output);
 	}
@@ -41,10 +41,18 @@ void	output_msg(t_phi *phi, char *msg)
 void	output_death(t_phi *phi)
 {
 	sem_wait(phi->data->sem_output);
-	timestamp(phi->data->start_time);
+	timestamp(phi);
 	printf("%i died\n", phi->id + 1);
-	return ;
+	phi->is_alive = 0;
 	// sem_post(phi->data->sem_output);
+	// sem_post(phi->data->sem_death);
+	// sem_close(phi->data->sem_continue);
+	// sem_close(phi->data->sem_output);
+	// sem_close(phi->data->sem_data);
+	// sem_close(phi->data->sem_forks);
+	// free(phi->data->phi_array);	
+	// sem_post(phi->data->sem_output);
+	return ;
 }
 
 void	output_meal_count(t_data *data)
@@ -56,7 +64,7 @@ void	output_meal_count(t_data *data)
 	{
 		if (data->phi_array[i].meal_count >= 0)
 		{
-			timestamp(data->start_time);
+			timestamp(&data->phi_array[0]);
 			printf("%i has eaten %i times\n", i + 1, 
 				data->phi_array[i].meal_count);
 		}

@@ -12,33 +12,32 @@
 
 #include "../includes/philo.h"
 
-// static void	free_philosophers(t_data *data)
-// {
-// 	int	i;
-//
-// 	i = 0;
-// 	while (i < data->phi_count)
-// 		free(data->phi_array[i++]);
-// }
-//
-void	kill_all(t_data *data)
+int	kill_all_phi(t_data *data, int exit_code)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->phi_count)
 	{
-		i++;
 		kill(data->phi_array[i++].pid, SIGKILL);
 	}
+	return (exit_code);
 }
 void	cleanup_data(t_data *data)
 {
-	forks_destroy(data);
-	// sem_close(data->sem_output);
-	// free_philosophers(data);
+	pthread_join(data->death_thread, NULL);
+	pthread_join(data->sated_thread, NULL);
 	sem_close(data->sem_output);
 	sem_close(data->sem_continue);
 	sem_close(data->sem_data);
+	sem_close(data->sem_forks);
+	sem_close(data->sem_death);
+	sem_close(data->sem_sated);
+	sem_unlink("/sem_forks");
+	sem_unlink("/sem_data");
+	sem_unlink("/sem_output");
+	sem_unlink("/sem_continue");
+	sem_unlink("/sem_death");
+	sem_unlink("/sem_sated");
 	free(data->phi_array);
 }

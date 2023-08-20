@@ -24,17 +24,20 @@ typedef struct s_phi {
 	pthread_t		t_id;
 	pid_t			pid;
 	int				is_alive;
+	int				is_sated;
 	int				id;
 	int				meal_count;
 	int				got_forks;
 	long			last_meal_time;
+	pthread_t		overseer;
 	struct s_data	*data;
 }	t_phi;
 
 typedef struct s_data {
-	t_tv	start_time;
+	long	start_time;
 	int		alive;
 	int		sated;
+	int		continuer;
 	long	tts;
 	long	tte;
 	long	ttd;
@@ -44,7 +47,12 @@ typedef struct s_data {
 	sem_t	*sem_data;
 	sem_t	*sem_output;
 	sem_t	*sem_continue;
+	sem_t	*sem_death;
+	sem_t	*sem_sated;
 	t_phi	*phi_array;
+	t_phi	*current_phi;
+	pthread_t	sated_thread;
+	pthread_t	death_thread;
 }	t_data;
 
 #endif

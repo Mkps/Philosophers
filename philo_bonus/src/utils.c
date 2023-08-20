@@ -52,7 +52,7 @@ long	ft_atol(const char *str)
 			return (-2);
 		i++;
 	}
-	if (sign == -1)
+	if (sign == -1 || atol == 0)
 		return (-1);
 	return (atol);
 }
@@ -100,4 +100,14 @@ void	ft_putstr(char *str)
 	while (str[i])
 		i++;
 	write(1, str, i);
+}
+
+int	data_continue(t_data *data)
+{
+	int	ret;
+
+	sem_wait(data->sem_continue);
+	ret = data->continuer;
+	sem_post(data->sem_continue);
+	return (ret);
 }

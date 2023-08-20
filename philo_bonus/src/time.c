@@ -16,14 +16,13 @@ void	ft_sleep(t_phi *phi, long duration)
 {
 	long	start;
 
+	(void)phi;
 	start = ft_get_time();
 	if (duration < 10)
 	{
-		// usleep(duration * 10);
-		// usleep(10);
 		return ;
 	}
-	while (ft_get_time() - start < duration && is_phi_alive(phi))
+	while (ft_get_time() - start < duration)
 	{
 		usleep(100);
 	}
@@ -51,7 +50,7 @@ void	ft_philo_q(t_phi *phi)
 	{
 		if (phi->id % 2 != 0)
 		{
-			usleep(100 * data->phi_count);
+			usleep(200);
 			output_msg(phi, "is thinking");
 		}
 	}
@@ -59,8 +58,7 @@ void	ft_philo_q(t_phi *phi)
 	{
 		if (phi->id % 2 == 0)
 		{
-			// usleep(500);
-			usleep(100 * data->phi_count);
+			usleep(200);
 			output_msg(phi, "is thinking");
 		}
 	}

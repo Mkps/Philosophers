@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include "philo_struct.h"
 
+int		kill_all_phi(t_data *data, int exit_code);
 void	init_data(t_data *data, char **av);
 void	set_table(t_data *data);
 void	philos_init(t_data *data);
@@ -31,7 +32,7 @@ void	ft_philo_q(t_phi *phi);
 void	ft_sleep(t_phi *phi, long duration);
 long	ft_timetol(t_tv time);
 long	ft_get_time(void);
-void	timestamp(t_tv start);
+void	timestamp(t_phi *phi);
 void	output_msg(t_phi *phi, char *msg);
 void	output_death(t_phi *phi);
 void	output_meal_count(t_data *data);
@@ -44,7 +45,7 @@ int		has_eaten_enough(t_phi *phi);
 int		all_phi_sated(t_data *data);
 int		is_phi_sated(t_phi *phi);
 void	increase_meal_count(t_phi *phi);
-void	run_thread(t_data *data);
+void	run_process(t_data *data);
 void	ft_create_thread(t_data *data);
 void	ft_join_thread(t_data *data);
 void	*overseer_thread(void *source);
@@ -62,5 +63,6 @@ void	philo_is_thinking(t_phi *phi);
 void	cleanup_data(t_data *data);
 int		check_input(char *arg);
 long	ft_atol(const char *str);
+int		data_continue(t_data *data);
 
 #endif
