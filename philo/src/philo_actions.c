@@ -31,8 +31,8 @@ void	philo_is_eating(t_phi *phi)
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->last_meal_time = ft_get_time();
 	pthread_mutex_unlock(&phi->data->mutex);
-	increase_meal_count(phi);
 	ft_sleep(phi, phi->data->tte);
+	increase_meal_count(phi);
 	unlock_forks(phi);
 	pthread_mutex_lock(&phi->data->mutex);
 	phi->got_forks = 0;
