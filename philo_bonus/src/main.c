@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:37:43 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 21:18:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,21 @@ void	check_args(int ac, char **av)
 	}
 }
 
-int	ft_get_child(t_data *data, t_phi *phi)
+int	ft_get_child(t_data *data, t_phi phi)
 {
 	int	phi_exit_code;
 	int	exit_code;
 
-	if (phi->pid && waitpid(phi->pid, &phi_exit_code, WNOHANG) != 0)
+	if (phi.pid && waitpid(phi.pid, &phi_exit_code, WNOHANG) != 0)
 	{
 		if (WIFEXITED(phi_exit_code))
 		{
 			exit_code = WEXITSTATUS(phi_exit_code);
-			if (exit_code == 3)
+			if (exit_code == PHI_DEAD)
 				return (kill_all_phi(data, 1));
-			if (exit_code == -1 || exit_code == -2)
+			if (exit_code == ERR_SEM || exit_code == ERR_PTHREAD)
 				return (kill_all_phi(data, -1));
-			if (exit_code == 2)
+			if (exit_code == PHI_SATED)
 			{
 				data->sated += 1;
 				return (1);
@@ -68,7 +68,7 @@ int	stop_process(t_data *data)
 		i = 0;
 		while (i < data->phi_count)
 		{
-			exit_code = ft_get_child(data, &data->phi_array[i]);
+			exit_code = ft_get_child(data, data->phi_array[i]);
 			if (exit_code == 1 || exit_code == -1)
 			{
 				sem_wait(data->sem_continue);
@@ -87,11 +87,15 @@ int	stop_process(t_data *data)
 int	main(int ac, char **av)
 {
 	t_data	data;
+	int		exit_code;
 
+	exit_code = 0;
 	check_args(ac, av);
 	init_data(&data, av);
 	philos_init(&data);
-	ft_spawn_philo(&data);
+	if (ft_spawn_philo(&data) == EXIT_FAILURE)
+		return (error_exit(&data));
+	exit_code = stop_process(&data);
 	cleanup_data(&data);
-	exit (0);
+	return (exit_code);
 }

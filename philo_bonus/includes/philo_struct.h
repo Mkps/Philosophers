@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:43:57 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 04:15:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 20:32:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct timeval	t_tv;
 
 # define ERR_PTHREAD	-2
 # define ERR_SEM 		-3
-# define PHI_DEAD		2
-# define PHI_SATED		3
+# define PHI_DEAD		3
+# define PHI_SATED		2
 
 typedef struct s_phi {
 	pid_t			pid;

@@ -6,7 +6,7 @@
 #    By: aloubier <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/08/21 03:47:33 by aloubier         ###   ########.fr        #
+#    Updated: 2023/08/21 16:35:19 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJS = $(addprefix $(OBJDIR), $(OBJ))
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -pthread -I$(INCDIR)
+CFLAGS = -Wall -Wextra -Werror -pedantic -I$(INCDIR)
 
 all: $(NAME)
 

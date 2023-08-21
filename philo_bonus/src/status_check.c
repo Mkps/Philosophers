@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:44 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 04:11:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 16:37:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,17 @@ int	status_check(t_data *data)
 {
 	if (pthread_create(&data->sated_thread, NULL, 
 			check_sated_thread, data) != 0)
+	{
+		printf("An error occured while starting a thread: sated_thread\n");
 		return (error_exit(data));
+	}
 	if (pthread_create(&data->death_thread, NULL, 
 			check_death_thread, data) != 0)
+	{
+		pthread_detach(data->sated_thread);
+		printf("An error occured while starting a thread: sated_thread\n");
 		return (error_exit(data));
+	}
 	return (0);
 }
 

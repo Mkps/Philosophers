@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 03:57:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 16:28:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	init_error(t_data *data)
 		sem_close(data->sem_output);
 	if (data->phi_array)
 		free(data->phi_array);
-	exit (1);
+	exit (EXIT_FAILURE);
 }
 
 int	error_exit(t_data *data)
@@ -43,7 +43,7 @@ int	error_exit(t_data *data)
 		free(data->phi_array);
 	if (data->phi_array)
 		free(data->phi_array);
-	return (0);
+	return (EXIT_FAILURE);
 }
 
 void	unlink_semaphores(void)
@@ -80,6 +80,7 @@ static int	init_semaphores(t_data *data)
 	return (0);
 }
 
+// CLeans up and exit with EXIT_FAILURE in case of error
 void	init_data(t_data *data, char **av)
 {
 	data->alive = 1;
@@ -90,10 +91,10 @@ void	init_data(t_data *data, char **av)
 	data->tte = ft_atol(av[3]);
 	data->tts = ft_atol(av[4]);
 	data->meal_limit = -1;
-	data->start_time = ft_get_time() + (10 * data->phi_count);
-	init_semaphores(data);
 	if (av[5] != NULL)
 		data->meal_limit = ft_atol(av[5]);
+	data->start_time = ft_get_time() + (10 * data->phi_count);
+	init_semaphores(data);
 	data->phi_array = (t_phi *)malloc(sizeof(t_phi) * data->phi_count);
 	if (!data->phi_array)
 		init_error(data);
