@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:43:57 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:11:23 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 04:15:33 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_tv;
 
+# define ERR_PTHREAD	-2
+# define ERR_SEM 		-3
+# define PHI_DEAD		2
+# define PHI_SATED		3
+
 typedef struct s_phi {
-	pthread_t		t_id;
 	pid_t			pid;
 	int				is_alive;
 	int				is_sated;

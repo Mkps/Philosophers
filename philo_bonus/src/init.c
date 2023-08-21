@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:35:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 03:57:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ void	init_error(t_data *data)
 
 int	error_exit(t_data *data)
 {
+	if (data->sem_data)
+		sem_close(data->sem_data);
+	if (data->sem_death)
+		sem_close(data->sem_death);
+	if (data->sem_continue)
+		sem_close(data->sem_continue);
+	if (data->sem_output)
+		sem_close(data->sem_output);
+	if (data->phi_array)
+		free(data->phi_array);
 	if (data->phi_array)
 		free(data->phi_array);
 	return (0);
@@ -46,7 +56,7 @@ void	unlink_semaphores(void)
 	sem_unlink("/sem_sated");
 }
 
-int	init_semaphores(t_data *data)
+static int	init_semaphores(t_data *data)
 {
 	unlink_semaphores();
 	data->sem_forks = sem_open("/sem_forks", O_CREAT, 0600, data->phi_count);

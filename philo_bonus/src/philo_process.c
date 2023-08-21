@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   philo_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:33:24 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 04:03:38 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <bits/pthreadtypes.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-void	wait_start(t_data *data);
-int		error_exit(t_data *data);
-void	philo_routine(t_phi *phi);
 
 void	run_process(t_data *data)
 {

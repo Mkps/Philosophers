@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:25:19 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 04:10:56 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,16 @@ void	philo_is_taking_forks(t_phi *phi)
 		sem_post(phi->data->sem_data);
 		return ;
 	}
-	philo_taking_first_fork(phi);
-	philo_taking_second_fork(phi);
+	sem_wait(phi->data->sem_forks);
+	sem_wait(phi->data->sem_data);
+	phi->got_forks = 1;
+	sem_post(phi->data->sem_data);
+	output_msg(phi, "has taken a fork");
+	sem_wait(phi->data->sem_forks);
+	sem_wait(phi->data->sem_data);
+	phi->got_forks = 2;
+	sem_post(phi->data->sem_data);
+	output_msg(phi, "has taken a fork");
 }
 
 void	philo_is_eating(t_phi *phi)
@@ -34,7 +42,8 @@ void	philo_is_eating(t_phi *phi)
 	phi->last_meal_time = ft_get_time();
 	sem_post(phi->data->sem_data);
 	ft_sleep(phi, phi->data->tte);
-	unlock_forks(phi);
+	sem_post(phi->data->sem_forks);
+	sem_post(phi->data->sem_forks);
 	sem_wait(phi->data->sem_data);
 	phi->got_forks = 0;
 	phi->meal_count++;

@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:31:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:36:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 03:54:29 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,7 @@ void	cleanup_data(t_data *data)
 	sem_close(data->sem_forks);
 	sem_close(data->sem_death);
 	sem_close(data->sem_sated);
-	sem_unlink("/sem_forks");
-	sem_unlink("/sem_data");
-	sem_unlink("/sem_output");
-	sem_unlink("/sem_continue");
-	sem_unlink("/sem_death");
-	sem_unlink("/sem_sated");
+	unlink_semaphores();
 	free(data->phi_array);
 }
 

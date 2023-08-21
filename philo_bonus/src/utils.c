@@ -6,13 +6,13 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:53 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/21 01:22:20 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/21 04:09:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	is_digit(char *arg)
+static int	is_digit(char *arg)
 {
 	int	i;
 
@@ -57,7 +57,7 @@ long	ft_atol(const char *str)
 	return (atol);
 }
 
-int	is_valid_value(char *arg)
+static int	is_valid_value(char *arg)
 {
 	long	value;
 
