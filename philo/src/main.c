@@ -20,7 +20,7 @@ void	check_args(int ac, char **av)
 	{
 		printf("Incorrect parameter number. Correct use is:\n");
 		printf ("./philo [nb_of_philosophers][time until death][time to eat]");
-		printf("[time to sleep] Optional: [Number of meal]\n");
+		printf("[time to sleep] \nOptional: [Number of meal]\n");
 		exit(1);
 	}
 	i = 1;
@@ -29,6 +29,13 @@ void	check_args(int ac, char **av)
 		if (check_input(av[i]))
 			exit (1);
 		i++;
+	}
+	if (ac == 6)
+	{
+		if (ft_atol(av[5]) == 0)
+		{
+			exit (0);
+		}
 	}
 }
 
