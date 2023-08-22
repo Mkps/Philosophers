@@ -6,13 +6,13 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:32:07 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:41:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/22 09:32:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	forks_init(t_data *data)
+int	forks_init(t_data *data)
 {
 	int	i;
 
@@ -20,9 +20,12 @@ void	forks_init(t_data *data)
 	i = 0;
 	while (i < data->phi_count)
 	{
-		pthread_mutex_init(&data->forks[i], NULL);
+		if (pthread_mutex_init(&data->forks[i],
+				NULL) != EXIT_SUCCESS)
+			return (error_forks_init(data, i));
 		i++;
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	forks_destroy(t_data *data)

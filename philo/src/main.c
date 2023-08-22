@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/15 12:37:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/22 09:34:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,14 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	check_args(ac, av);
-	init_data(&data, av);
+	if (init_data(&data, av) != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
 	set_table(&data);
-	run_thread(&data);
+	if (run_thread(&data) != EXIT_SUCCESS)
+	{
+		cleanup_data(&data);
+		return (EXIT_FAILURE);
+	}
 	cleanup_data(&data);
-	return (0);
+	return (EXIT_SUCCESS);
 }
