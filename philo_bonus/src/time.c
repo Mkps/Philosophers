@@ -45,7 +45,7 @@ void	ft_philo_q(t_phi *phi)
 {
 	t_data	*data;
 
-	data = phi->data; 
+	data = phi->data;
 	if (data->phi_count % 2 == 0)
 	{
 		if (phi->id % 2 != 0)

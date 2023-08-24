@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/22 09:32:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:41:49 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*philo_thread(void *source)
 	t_data	*data;
 
 	phi = (t_phi *)source;
-	data = phi->data; 
+	data = phi->data;
 	ft_philo_q(phi);
 	while (phi_continue(data))
 	{

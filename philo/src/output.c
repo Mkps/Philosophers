@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:36 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/22 09:32:37 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:38:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	output_meal_count(t_data *data)
 		if (data->phi_array[i]->meal_count >= 0)
 		{
 			timestamp(data->start_time);
-			printf("%i has eaten %i times\n", i + 1, 
+			printf("%i has eaten %i times\n", i + 1,
 				data->phi_array[i]->meal_count);
 		}
 		i++;

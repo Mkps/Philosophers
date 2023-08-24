@@ -57,7 +57,7 @@ void	output_meal_count(t_data *data)
 		if (data->phi_array[i].meal_count >= 0)
 		{
 			timestamp(&data->phi_array[0]);
-			printf("%i has eaten %i times\n", i + 1, 
+			printf("%i has eaten %i times\n", i + 1,
 				data->phi_array[i].meal_count);
 		}
 		i++;

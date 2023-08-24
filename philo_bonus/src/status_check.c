@@ -59,13 +59,13 @@ static void	*check_death_thread(void *src)
 
 int	status_check(t_data *data)
 {
-	if (pthread_create(&data->sated_thread, NULL, 
+	if (pthread_create(&data->sated_thread, NULL,
 			check_sated_thread, data) != 0)
 	{
 		printf("An error occured while starting a thread: sated_thread\n");
 		return (error_exit(data));
 	}
-	if (pthread_create(&data->death_thread, NULL, 
+	if (pthread_create(&data->death_thread, NULL,
 			check_death_thread, data) != 0)
 	{
 		pthread_detach(data->sated_thread);
@@ -88,7 +88,7 @@ int	phi_continue(t_phi *phi)
 		sem_post(data->sem_data);
 		return (0);
 	}
-	if (data->meal_limit != -1 && phi->is_sated == 0 
+	if (data->meal_limit != -1 && phi->is_sated == 0
 		&& phi->meal_count >= data->meal_limit)
 	{
 		sem_post(data->sem_sated);

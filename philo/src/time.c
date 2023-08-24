@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 23:44:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/22 09:32:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:42:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_philo_q(t_phi *phi)
 {
 	t_data	*data;
 
-	data = phi->data; 
+	data = phi->data;
 	if (data->phi_count % 2 == 0)
 	{
 		if (phi->id % 2 != 0)
